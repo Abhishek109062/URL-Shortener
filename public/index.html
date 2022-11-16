@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>URL Shortner</title>
+    <link rel="stylesheet" href="./style.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- CSS only -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        clifford: '#da373d',
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities { .content-auto { content-visibility: auto; } }
+    </style>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio,line-clamp"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <!-- JavaScript Bundle with Popper -->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+    <div class="nav">
+        <div>URL SHORTNER</div>
+    </div>
+
+
+    <div class="ipt">
+
+        <div class="input-group mb-3">
+            <span class="input-group-text" id="basic-addon3">https://</span>
+            <input type="text" class="form-control" id="str" aria-describedby="basic-addon3">
+            <button type="button" class="btn btn-primary" onclick="store()">submit</button>
+        </div>
+
+    </div>
+
+    <div class="tbl">
+        <table class="table table-striped table-hover">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">URL</th>
+                    <th scope="col">Shorturl</th>
+                    <th scope="col">Clicks</th>
+                </tr>
+            </thead>
+            <tbody class="table-group-divider" id="tbody">
+
+
+            </tbody>
+        </table>
+        <div id="liveAlertPlaceholder"></div>
+
+
+    </div>
+
+    <script>
+        window.onload = ftch();
+
+        async function ftch() {
+            var data = await fetch('http://localhost:3000/geturls');
+            data = await data.json();
+            const ele = document.getElementById('tbody');
+            var s = '';
+            var i = 1;
+
+            data.map((d) => {
+                s += `<tr  class="r"><th scope="row">${i}</th><td class="mainurl">  <a id="s${i}" onclick="location.reload()" href="http://localhost:3000/${d.short}"  target="_blank"  > ${d.full}</a></td><td >  <div id="cpy"><a href="http://localhost:3000/${d.short}" onclick="location.reload()" target="_blank" > ${d.short}
+                    </a><span id="liveAlertBtn"  onclick="copytext('s${i}');" class="material-symbols-outlined cp">content_copy
+</span> </div></td><td>  <div id="del"> <div>${d.clicks}</div> <div><span  onclick="deletee('s'+${i})" class="material-symbols-outlined del">
+delete
+</span></div> </div></td></tr>`
+                i++;
+            })
+            ele.innerHTML += s;
+        }
+        async function copytext(x) {
+            try {
+                var v = document.getElementById(x).href;
+                await navigator.clipboard.writeText(v);
+                alert("copied sucessfully")
+
+            } catch (err) {
+                console.error('Failed to copy: ', err);
+            }
+
+        }
+        async function store() {
+            var ss = document.getElementById('str').value;
+            console.log(ss + "ss value")
+            var data = {
+                url: ss
+            }
+            await fetch('http://localhost:3000/create', {
+                "method": "POST",
+                "body": JSON.stringify(data),
+
+
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            location.reload();
+        }
+        async function deletee(x) {
+
+            var c = document.getElementById(x).innerText;
+            var data = {
+                url: c
+            };
+            await fetch('http://localhost:3000/delete', {
+                "method": "POST",
+                "body": JSON.stringify(data),
+
+
+
+                headers: {
+                    'Content-Type': 'application/json',
+                }
+            });
+            location.reload();
+
+        }
+        const alertPlaceholder = document.getElementById('liveAlertPlaceholder')
+
+        const alert = (message, type) => {
+            const wrapper = document.createElement('div')
+            wrapper.innerHTML = [
+                `<div class="alert alert-${type} alert-dismissible" role="alert">`,
+                `   <div>${message}</div>`,
+                '   <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>',
+                '</div>'
+            ].join('')
+
+            alertPlaceholder.append(wrapper)
+        }
+
+        const alertTrigger = document.getElementById('liveAlertBtn')
+        if (alertTrigger) {
+            alertTrigger.addEventListener('click', () => {
+                alert('Nice, you triggered this alert message!', 'success')
+            })
+        }
+    </script>
+
+
+
+
+    <div class="shadow-lg rounded-2xl p-4 bg-white dark:bg-gray-800 w-64 m-auto">
+        <div class="w-full h-full text-center">
+            <div class="flex h-full flex-col justify-between">
+                <svg class="h-12 w-12 mt-4 m-auto text-green-500" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
+                </path>
+            </svg>
+                <p class="text-gray-600 dark:text-gray-100 text-md py-2 px-6">
+                    User
+                    <span class="text-gray-800 dark:text-white font-bold">
+                    23722873
+                </span> has been deleted form database.
+                </p>
+                <div class="flex items-center justify-between gap-4 w-full mt-8">
+                    <button type="button" class="py-2 px-4  bg-indigo-600 hover:bg-indigo-700 focus:ring-indigo-500 focus:ring-offset-indigo-200 text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2  rounded-lg ">
+                    Close
+                </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+</body>
+
+</html>

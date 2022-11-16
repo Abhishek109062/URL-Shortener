@@ -1,0 +1,82 @@
+* {
+    padding: 0;
+    margin: 0;
+}
+
+body {
+    background-image: url('https://images.unsplash.com/photo-1557683325-3ba8f0df79de?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=564&q=80');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.ipt {
+    width: 40vw;
+    margin: auto;
+    margin-top: 40px;
+}
+
+.nav {
+    height: 7vh;
+    background-color: beige;
+    color: rgb(68, 0, 255);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.tbl {
+    width: 80vw;
+    margin: auto;
+    margin-top: 40px;
+}
+
+#del {
+    width: 70px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+#cpy {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.del {
+    cursor: pointer;
+    visibility: hidden;
+}
+
+.cp {
+    cursor: pointer;
+    visibility: hidden;
+}
+
+.r:hover .cp {
+    visibility: visible;
+}
+
+.r:hover .del {
+    transition: all 200ms;
+    visibility: visible;
+}
+
+.r a {
+    text-decoration: none;
+    color: aliceblue;
+    transition: all 500ms;
+}
+
+#liveAlertPlaceholder {
+    width: 30vh;
+    margin: auto;
+}
+
+.mainurl {
+    max-width: 100px;
+    text-overflow: clip;
+    height: 20px;
+    overflow: hidden;
+}

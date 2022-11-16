@@ -1,0 +1,16 @@
+.app {
+    display: flex;
+}
+
+.sidebar {
+    transition: all 500ms ease-in-out;
+}
+
+.main {
+    flex-grow: 2;
+}
+
+.nav {
+    width: 60%;
+    margin: auto;
+}
